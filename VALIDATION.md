@@ -25,6 +25,7 @@ SERVFAIL awal terdiagnosis sebagai authoritative nameserver menolak query. Setel
 
 - Repository PUBLIC: https://github.com/Jani999/art2fcl-website ; branch `main`, remote `origin` benar.
 - Workflow pertama: [41591972599](https://github.com/Jani999/art2fcl-website/actions/runs/41591972599), **success**, termasuk npm ci, typecheck, lint, static build, upload artifact dan deploy.
+- Workflow selanjutnya juga berhasil. Actions kemudian diperbarui ke rilis stabil resmi berbasis Node 24 (checkout 7.0.1, setup-node 7.1.0, configure-pages 6.0.0, upload-pages-artifact 5.0.0, deploy-pages 5.0.1) untuk menghapus peringatan Node 20. Runtime build aplikasi tetap Node 22; runner dipatok Ubuntu 24.04.
 - Pages menggunakan `build_type: workflow`, `cname: art2fcl.my.id`.
 - https://art2fcl.my.id memberi **HTTP 200** dengan judul ART2FCL // SYSTEM BREACH.
 - Gambar dan audio pada domain produksi memberi HTTP 200.
