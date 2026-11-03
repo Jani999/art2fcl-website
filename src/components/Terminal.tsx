@@ -1,12 +1,27 @@
 "use client";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+const commands = [
+  "help",
+  "about",
+  "entity",
+  "archive",
+  "status",
+  "music",
+  "contact",
+  "clear",
+  "exit",
+  "breach",
+  "corrupt",
+  "restore",
+  "scan",
+];
 export default function Terminal({
   action,
 }: {
   action: (command: string) => void;
 }) {
   const [output, setOutput] = useState([
-      "ART2FCL OS [fictional interface v.01]",
+      "ART2FCL OS [fictional interface v.02]",
       "Connection local. No commands leave this browser.",
       "Type “help” to see available commands.",
     ]),
@@ -14,6 +29,13 @@ export default function Terminal({
     [history, setHistory] = useState<string[]>([]),
     [index, setIndex] = useState(0);
   const field = useRef<HTMLInputElement>(null);
+  const log = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (log.current) log.current.scrollTop = log.current.scrollHeight;
+  }, [output]);
+  const matches = input
+    ? commands.filter((command) => command.startsWith(input.toLowerCase()))
+    : [];
   function run(command: string) {
     const cmd = command.trim().toLowerCase();
     if (!cmd) return;
@@ -25,7 +47,7 @@ export default function Terminal({
       return;
     }
     const responses: Record<string, string> = {
-      help: "help · about · entity · archive · status · music · contact · clear · exit · breach",
+      help: commands.join(" · "),
       about:
         "ART2FCL // SYSTEM BREACH. An experimental digital artwork about the machinery beneath justice.",
       status:
@@ -36,6 +58,11 @@ export default function Terminal({
       contact: "Opening creator connection…",
       exit: "Session suspended.",
       breach: "ACCESS DENIED // REALITY UNLOCKED",
+      corrupt:
+        "[ FICTIONAL OVERRIDE ] Signal integrity reduced. Distortion armed. Use restore to reset.",
+      restore:
+        "[ RESTORED ] Visual corruption cleared. Original signal recovered.",
+      scan: "[ SCANNING ] Image planes: 03 / shell: marble / conscience: unresolved. Fictional diagnostic sweep active.",
     };
     setOutput((v) =>
       [
@@ -52,16 +79,19 @@ export default function Terminal({
         <span>
           <i /> LOCAL SESSION
         </span>
-        <span>NO SERVER CONNECTION</span>
+        <span>NO SERVER CONNECTION / v.02</span>
       </div>
       <div
         className="terminal-output"
+        ref={log}
         role="log"
         aria-live="polite"
         data-lenis-prevent
       >
         {output.map((v, i) => (
-          <p key={i}>{v}</p>
+          <p className={v.startsWith("root@") ? "command-line" : ""} key={i}>
+            {v}
+          </p>
         ))}
       </div>
       <form
@@ -80,6 +110,15 @@ export default function Terminal({
           onChange={(e) => setInput(e.target.value)}
           aria-label="Terminal command"
           onKeyDown={(e) => {
+            if (
+              e.key === "Tab" &&
+              !e.shiftKey &&
+              matches.length === 1 &&
+              matches[0] !== input
+            ) {
+              e.preventDefault();
+              setInput(matches[0]);
+            }
             if (e.key === "ArrowUp") {
               e.preventDefault();
               const n = Math.max(0, index - 1);
@@ -98,8 +137,13 @@ export default function Terminal({
           ↵
         </button>
       </form>
+      <div className="terminal-autocomplete" aria-live="polite">
+        {matches.length
+          ? `SUGGEST / ${matches.join(" · ")}${matches.length === 1 ? " / TAB TO COMPLETE" : ""}`
+          : "TYPE help / ↑↓ HISTORY / TAB AUTOCOMPLETE"}
+      </div>
       <div className="command-hints">
-        {["help", "entity", "status", "breach", "clear"].map((v) => (
+        {["help", "entity", "scan", "corrupt", "restore", "clear"].map((v) => (
           <button
             key={v}
             onClick={() => {

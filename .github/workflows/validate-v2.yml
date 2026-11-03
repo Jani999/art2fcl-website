@@ -1,0 +1,35 @@
+name: Validate cinematic preview
+on:
+  push:
+    branches: [feature/cinematic-v2]
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: preview-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-node@v7.1.0
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - run: npm test
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: cinematic-v2-review
+          path: |
+            out/
+            .local/v2/
+            test-results/
+          include-hidden-files: true

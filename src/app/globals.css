@@ -1377,3 +1377,5 @@ dialog::backdrop {
     bottom: 90px;
   }
 }
+
+/* Cinematic V2 stylesheet is imported after shared UI tokens. */

@@ -36,7 +36,7 @@ class ModelBoundary extends Component<
     return this.state.failed ? (
       <div>
         <p role="status">3D unavailable. Original artwork restored.</p>
-        <img src="/assets/goddess.png" alt="Cybernetic Lady Justice" />
+        <img src="/assets/goddess-clean.webp" alt="Cybernetic Lady Justice" />
       </div>
     ) : (
       this.props.children
@@ -56,7 +56,7 @@ export default function GoddessModel3D({
         dpr={[1, 1.5]}
         camera={{ position: [0, 0, 5] }}
         fallback={
-          <img src="/assets/goddess.png" alt="Cybernetic Lady Justice" />
+          <img src="/assets/goddess-clean.webp" alt="Cybernetic Lady Justice" />
         }
       >
         <ambientLight intensity={1.5} />

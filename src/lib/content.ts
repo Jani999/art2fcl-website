@@ -52,21 +52,21 @@ export const hotspots = [
     tag: "03 / THE SCALES",
     text: "Two equal pans. Unequal histories. This fictional instrument measures what is presented, never what was withheld.",
     x: 83,
-    y: 49,
+    y: 39,
   },
   {
     title: "EXECUTION EDGE",
     tag: "04 / THE SWORD",
     text: "A decision made material. The sword cannot reconsider; the hand holding it must.",
     x: 18,
-    y: 78,
+    y: 74,
   },
   {
     title: "CORE MEMORY",
     tag: "05 / THE CHEST",
     text: "The fracture is the archive. Beneath the stone, every previous judgment leaves a trace that the next decision will inherit.",
     x: 46,
-    y: 44,
+    y: 40,
   },
 ];
 export type Dossier = { title: string; tag: string; text: string };

@@ -4,6 +4,12 @@ Pengalaman seni digital sinematik tentang JUSTICE.exe, dibangun di `D:\ART2FCL`.
 
 **Live:** https://art2fcl.my.id — **Source:** https://github.com/Jani999/art2fcl-website
 
+## Cinematic V2 — review branch
+
+`feature/cinematic-v2` berisi enam koreografi scroll baru, tekstur transparan yang dibersihkan, shader GLSL orisinal, archive perspektif, dan terminal dengan autocomplete serta corrupt/restore/scan. Produksi tetap V1 sampai PR ditinjau dan digabungkan. Workflow validasi V2 hanya menghasilkan artifact preview, tanpa deployment.
+
+Lihat [QA V2](docs/V2-VALIDATION.md), [riset dan lisensi](docs/V2-RESEARCH.md), serta [perbandingan alpha](docs/v2-assets/alpha-comparison.jpg). Aset utama V2 adalah `public/assets/goddess-clean.webp`, diproses non-destruktif dari `Cybernetic Marble Lady Justice.png`. Tidak ada GLB asli yang ditemukan; rendering memakai bidang gambar 2.5D dan shader transparan, bukan rotasi 360° palsu.
+
 Deployment pertama [berhasil](https://github.com/Jani999/art2fcl-website/actions/runs/41591972599). Custom domain, redirect www, sertifikat HTTPS dan Enforce HTTPS terverifikasi aktif pada 3 November 2026.
 
 ## Menjalankan
@@ -18,7 +24,7 @@ npm run build
 
 Build menghasilkan `out/`; tidak membutuhkan server Node saat produksi. Font dibundel lokal. Gunakan `npm ci` untuk instalasi reproducible. Domain root dikonfigurasi tanpa basePath.
 
-`npm test` menjalankan browser Edge yang terpasang terhadap static export (jalankan build lebih dahulu). Untuk menguji situs publik dari PowerShell: `$env:TEST_BASE_URL='https://art2fcl.my.id'; npm test`. Screenshot hasil QA disimpan lokal di `.local/` dan tidak dipublikasikan.
+`npm test` menjalankan browser Edge lokal atau Chromium pada CI terhadap static export (jalankan build lebih dahulu). `npm run preview` menyajikan `out/` di localhost:3000. Suite V2 harus dijalankan terhadap build V2, bukan produksi V1. Screenshot QA disimpan di `.local/v2/` dan disertakan dalam artifact CI untuk review.
 
 ## Pengalaman
 

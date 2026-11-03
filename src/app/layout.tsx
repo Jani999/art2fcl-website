@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import "@fontsource/archivo-black/latin-400.css";
 import "@fontsource/ibm-plex-mono/latin-400.css";
+import "@fontsource/noto-sans-jp/400.css";
 import "./globals.css";
+import "./cinematic-v2.css";
 export const metadata: Metadata = {
   metadataBase: new URL("https://art2fcl.my.id"),
   title: "ART2FCL // SYSTEM BREACH",

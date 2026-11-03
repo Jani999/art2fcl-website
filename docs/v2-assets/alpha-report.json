@@ -1,0 +1,23 @@
+{
+  "source": "public\\assets\\Cybernetic Marble Lady Justice.png",
+  "source_sha256": "b6fe70a846ae1a8d18c72587b07a1cb50686f68bf9c938085fbcd3703c64b848",
+  "source_size": [
+    1024,
+    1536
+  ],
+  "output_size": [
+    1152,
+    1664
+  ],
+  "padding_px": 64,
+  "source_alpha_max": 254,
+  "transparent_source_pixels": 618175,
+  "edge_color_pixels_repaired": 40767,
+  "source_boundary_occupied_pixels": {
+    "left": 0,
+    "right": 0,
+    "top": 0,
+    "bottom": 0
+  },
+  "notes": "Original preserved byte-for-byte. No geometry reconstruction. Existing cropped details cannot be recovered. Alpha fractional coverage retained."
+}
