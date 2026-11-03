@@ -2,6 +2,10 @@
 
 Pengalaman seni digital sinematik tentang JUSTICE.exe, dibangun di `D:\ART2FCL`. Next.js App Router, TypeScript, Tailwind CSS, GSAP/ScrollTrigger, Lenis, Motion, serta Three.js / React Three Fiber / Drei untuk model masa depan.
 
+**Live:** https://art2fcl.my.id — **Source:** https://github.com/Jani999/art2fcl-website
+
+Deployment pertama [berhasil](https://github.com/Jani999/art2fcl-website/actions/runs/41591972599). Custom domain, redirect www, sertifikat HTTPS dan Enforce HTTPS terverifikasi aktif pada 3 November 2026.
+
 ## Menjalankan
 
 ```sh
@@ -13,6 +17,8 @@ npm run build
 ```
 
 Build menghasilkan `out/`; tidak membutuhkan server Node saat produksi. Font dibundel lokal. Gunakan `npm ci` untuk instalasi reproducible. Domain root dikonfigurasi tanpa basePath.
+
+`npm test` menjalankan browser Edge yang terpasang terhadap static export (jalankan build lebih dahulu). Untuk menguji situs publik dari PowerShell: `$env:TEST_BASE_URL='https://art2fcl.my.id'; npm test`. Screenshot hasil QA disimpan lokal di `.local/` dan tidak dipublikasikan.
 
 ## Pengalaman
 

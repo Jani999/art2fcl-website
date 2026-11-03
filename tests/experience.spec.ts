@@ -1,4 +1,23 @@
 import { test, expect } from "@playwright/test";
+test("chapter layouts remain readable on desktop and mobile", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  for (const width of [1440, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/");
+    for (const id of ["divinity", "archive", "terminal", "transmission"]) {
+      const section = page.locator(`#${id}`);
+      await section.scrollIntoViewIfNeeded();
+      await section.screenshot({ path: `.local/${id}-${width}.png` });
+      expect(
+        await page.evaluate(
+          () => document.documentElement.scrollWidth <= innerWidth,
+        ),
+      ).toBeTruthy();
+    }
+  }
+});
 test.beforeEach(async ({ page }) => {
   await page.addInitScript(() => localStorage.setItem("art2fcl-visited", "1"));
 });
@@ -80,7 +99,11 @@ test("audio is real, seek, volume and persistent", async ({ page }) => {
   ).toBeGreaterThan(0);
   await page.getByRole("button", { name: "Expand player" }).click();
   await page.getByRole("slider", { name: "Seek audio" }).click();
-  await expect.poll(() => page.locator("audio").evaluate((el:HTMLAudioElement)=>el.currentTime)).toBeGreaterThan(10);
+  await expect
+    .poll(() =>
+      page.locator("audio").evaluate((el: HTMLAudioElement) => el.currentTime),
+    )
+    .toBeGreaterThan(10);
   await page.getByRole("slider", { name: "Volume", exact: true }).fill("0.3");
   await page.getByRole("button", { name: "Mute audio", exact: true }).click();
   expect(

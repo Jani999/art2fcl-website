@@ -29,10 +29,19 @@ http
       const range = req.headers.range?.match(/^bytes=(\d+)-(\d*)$/);
       if (range) {
         const start = Number(range[1]);
-        const end = Math.min(Number(range[2] || body.length - 1), body.length - 1);
-        if (start > end) { res.writeHead(416, { "Content-Range": `bytes */${body.length}` }).end(); return; }
+        const end = Math.min(
+          Number(range[2] || body.length - 1),
+          body.length - 1,
+        );
+        if (start > end) {
+          res
+            .writeHead(416, { "Content-Range": `bytes */${body.length}` })
+            .end();
+          return;
+        }
         res.writeHead(206, {
-          "Content-Type": types[path.extname(file)] || "application/octet-stream",
+          "Content-Type":
+            types[path.extname(file)] || "application/octet-stream",
           "Accept-Ranges": "bytes",
           "Content-Range": `bytes ${start}-${end}/${body.length}`,
           "Content-Length": end - start + 1,
