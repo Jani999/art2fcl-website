@@ -1,5 +1,9 @@
 # Dependensi dan eksperimen visual
 
+## Pembaruan V2
+
+Audit tujuh referensi dan tiga teknik pilihan tersedia di [V2-RESEARCH.md](docs/V2-RESEARCH.md). V2 menggunakan Fiber/Three untuk satu shader transparan orisinal di bab Breach, selain viewer GLB opsional. Noto Sans JP (SIL OFL) ditambahkan sebagai font lokal. Tidak ada library animasi tambahan atau kode demo upstream yang disalin. Detail di bawah adalah catatan implementasi V1.
+
 Pemeriksaan: 3 November 2026. Versi persis dikunci dalam package-lock.json.
 
 | Proyek | Lisensi / kompatibilitas | Keputusan |
