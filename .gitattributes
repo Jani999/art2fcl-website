@@ -1,0 +1,6 @@
+# Preserve downloaded vendor bytes and original reference hashes on Windows.
+portfolio/assets/vendor/*.js -text
+references/claude-design/index.html -text
+references/claude-design/CODEX_PROMPT.md -text
+# Upstream license/header whitespace remains verbatim.
+portfolio/assets/vendor/** -whitespace

@@ -1,57 +1,49 @@
-# ART2FCL // SYSTEM BREACH
+# ART2FCL / Claude portfolio integration
 
-Pengalaman seni digital sinematik tentang JUSTICE.exe, dibangun di `D:\ART2FCL`. Next.js App Router, TypeScript, Tailwind CSS, GSAP/ScrollTrigger, Lenis, Motion, serta Three.js / React Three Fiber / Drei untuk model masa depan.
+Production release: `release/claude-portfolio`, copied from the approved Claude preview (`1317dfa`) onto production main without V2/V3 history. Site: https://art2fcl.my.id.
 
-**Live:** https://art2fcl.my.id — **Source:** https://github.com/Jani999/art2fcl-website
+This branch faithfully integrates the supplied Claude `index.html` as a standalone static portfolio: neon Tokyo city, five sections, three projects, animated HUD, and persistent music controls. The original production Next.js code remains in `src/` and `public/`; its commands are prefixed with `legacy:`. The two presentations are not layered together.
 
-Deployment pertama [berhasil](https://github.com/Jani999/art2fcl-website/actions/runs/41591972599). Custom domain, redirect www, sertifikat HTTPS dan Enforce HTTPS terverifikasi aktif pada 3 November 2026.
-
-## Menjalankan
+## Local review
 
 ```sh
-npm install
-npm run dev
-npm run typecheck
-npm run lint
-npm run build
+npm ci
+npm run build:preview
+npm run preview
 ```
 
-Build menghasilkan `out/`; tidak membutuhkan server Node saat produksi. Font dibundel lokal. Gunakan `npm ci` untuk instalasi reproducible. Domain root dikonfigurasi tanpa basePath.
+Open http://127.0.0.1:4173. The local build expects the supplied recording at `references/claude-design/demons-shot.mp3`. It is ignored by Git. A review server may also be running at http://127.0.0.1:4174.
 
-`npm test` menjalankan browser Edge yang terpasang terhadap static export (jalankan build lebih dahulu). Untuk menguji situs publik dari PowerShell: `$env:TEST_BASE_URL='https://art2fcl.my.id'; npm test`. Screenshot hasil QA disimpan lokal di `.local/` dan tidak dipublikasikan.
+For a checkout without the supplied recording:
 
-## Pengalaman
+```sh
+npm run build
+node scripts/serve-portfolio.mjs dist 4175
+```
 
-- Boot sekali per browser, tombol skip, dan restart.
-- Enam bab: Awakening, Divinity, Breach, Archive, Terminal, Final Transmission.
-- Komposisi PNG 2.5D, timeline scroll reversible, progress aktual, navigasi dialog.
-- Lima hotspot anatomi dan empat dossier arsip dengan fokus keyboard/Escape.
-- Terminal simulasi lokal dengan history, help, about, entity, archive, status, music, contact, clear, exit, breach. Tidak mengeksekusi shell/server.
-- Pemutar MP3 persisten: gesture untuk play, pause, seek, mute, volume, durasi, visualizer frekuensi Web Audio, serta status kegagalan.
-- FX/performance tersimpan, reduced motion, layout mobile, jam lokal, halaman 404.
+This publish artifact intentionally displays an unavailable-audio state. Public redistribution of the recording awaits confirmed rights; it is never included in the default build or review artifacts uploaded by CI.
 
-## Aset dan model
+## Validation
 
-`public/assets/goddess.png` adalah gambar 2D asli. Tidak diklaim sebagai model 3D. `public/audio/demons-shot.mp3` adalah audio yang disediakan pengguna. Distribusi publik lagu komersial mungkin memerlukan izin pemegang hak; pengguna perlu memastikan izin publikasi.
+```sh
+npm run check
+npm run lint
+npm run build
+npm run build:preview
+npm test
+npm run typecheck
+```
 
-Untuk mode 3D masa depan, tambahkan model valid `public/models/goddess.glb`, lalu buka OPTIONAL 3D VIEWER pada bagian anatomi. Komponen menerima `url` dan `progress` (0–1) untuk rotasi Y nyata. Viewer dimuat lazy; model tidak disertakan saat ini.
+Playwright uses installed Edge locally, Chromium in CI, or Firefox with `TEST_ENGINE=firefox`. Set `PORTFOLIO_PUBLISH=1` to test `dist/` on port 4175 with local-audio tests explicitly skipped. Screenshots and measurements are under `.local/claude/`.
 
-## Deployment GitHub Pages
+## Files and deployment
 
-Workflow `.github/workflows/deploy.yml` menginstal dengan npm ci, memeriksa types/lint, membangun static export, mengunggah `out/`, lalu menjalankan deploy-pages. Source Pages harus `GitHub Actions`.
+- `portfolio/`: HTML, CSS, application JS, local pinned libraries and fonts.
+- `references/claude-design/index.html`: unmodified canonical visual reference.
+- `scripts/build-portfolio.mjs`: separate local-audio and public build outputs.
+- `dist/`: GitHub Pages artifact; never includes legacy `public/` assets.
+- `.github/workflows/deploy.yml`: deploys only from `main`, including manual runs. Owner approval is required before merging this branch.
 
-Custom domain diatur melalui Settings → Pages / REST API, bukan mengandalkan CNAME dalam artifact Actions. Target `https://art2fcl.my.id`.
+The existing Pages custom-domain configuration is retained. DNS and registrar settings were not changed. The workflow does not use a repository-name base path or attempt to replace Pages settings with a CNAME file.
 
-Jika DNS belum dikonfigurasi, tambahkan ke zone `art2fcl.my.id`:
-
-| Jenis | Host | Nilai |
-| --- | --- | --- |
-| A | @ | 185.199.108.153 |
-| A | @ | 185.199.109.153 |
-| A | @ | 185.199.110.153 |
-| A | @ | 185.199.111.153 |
-| CNAME opsional | www | Jani999.github.io |
-
-Periksa konflik A/AAAA/ALIAS sebelum mengubahnya; jangan mengubah MX/TXT email. Jangan membuat wildcard. Aktifkan Enforce HTTPS setelah sertifikat tersedia. Verifikasi domain pada GitHub account Settings → Pages menggunakan TXT yang diberikan GitHub (nilai unik tidak dapat ditebak).
-
-Lihat `THIRD_PARTY.md` untuk audit library dan `VALIDATION.md` untuk hasil pemeriksaan aktual.
+See [integration and QA notes](docs/CLAUDE-INTEGRATION.md). V2/V3 experiments remain on their own branches; their source changes are excluded from this release.
