@@ -1,0 +1,11 @@
+node_modules/
+.next/
+out/
+.env*
+.backups/
+test-results/
+playwright-report/
+*.tsbuildinfo
+.local/
+
+CODEX_MASTER_PROMPT_ART2FCL.md

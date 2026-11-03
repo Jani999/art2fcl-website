@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://art2fcl.my.id/sitemap.xml
