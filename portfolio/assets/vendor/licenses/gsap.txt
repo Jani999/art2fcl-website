@@ -1,0 +1,4 @@
+GSAP 3.12.5 and ScrollTrigger 3.12.5
+Standard 'no charge' license: https://gsap.com/standard-license. Club GSAP members get more: https://gsap.com/licensing/. Why GreenSock doesn't employ an MIT license: https://gsap.com/why-license/
+Copyright GreenSock. License notices are retained in both minified source files.
+Current standard terms: https://gsap.com/standard-license/

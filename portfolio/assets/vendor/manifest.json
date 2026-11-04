@@ -1,0 +1,50 @@
+[
+  {
+    "url": "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js",
+    "file": "gsap.min.js",
+    "bytes": 72214,
+    "sha256": "28033e449a31ebcc396e5be8b13b63152bf03094288fb5867034321927bce087"
+  },
+  {
+    "url": "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js",
+    "file": "ScrollTrigger.min.js",
+    "bytes": 43380,
+    "sha256": "ad33c2df9ada8a663c2147357828f980d0b7ca731ef33eb3c6e4f327c3b2cda5"
+  },
+  {
+    "url": "https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js",
+    "file": "lenis.min.js",
+    "bytes": 13485,
+    "sha256": "b2958f142f832f0d5e547cdef77e6fadfce16bea60982fc8bbf50395a2439df8"
+  },
+  {
+    "url": "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js",
+    "file": "three.min.js",
+    "bytes": 603445,
+    "sha256": "9274bbcec8d96168626c732b5d31c775aa8cfb7eaa0599bec0c175908a2c1ce2"
+  },
+  {
+    "url": "https://cdn.jsdelivr.net/npm/@tsparticles/slim@3.5.0/tsparticles.slim.bundle.min.js",
+    "file": "tsparticles.slim.bundle.min.js",
+    "bytes": 146104,
+    "sha256": "251d4f4c7b78e94aadd77c7e207bfa17905e545b3ef34df0c1198af82b7e5abe"
+  },
+  {
+    "url": "https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js",
+    "file": "vanilla-tilt.min.js",
+    "bytes": 8887,
+    "sha256": "de6fa8d3f40dbae2726a72f7d1ae46bb0588267af05355bef1d128f737f4a282"
+  },
+  {
+    "url": "https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js",
+    "file": "anime.min.js",
+    "bytes": 17741,
+    "sha256": "5cbda29ea5096ac9404c59c77493a2f467d0eb4a27f16c750b61fc0d888dd716"
+  },
+  {
+    "url": "https://cdn.jsdelivr.net/npm/typed.js@2.1.0/dist/typed.umd.js",
+    "file": "typed.umd.js",
+    "bytes": 9843,
+    "sha256": "58424467abb3fa4b302a80c7108fe20ca8328e4ecb4275cf1a04db3fa5f83f27"
+  }
+]

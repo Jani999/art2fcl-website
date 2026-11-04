@@ -1,0 +1,39 @@
+name: Validate Claude portfolio preview
+on:
+  push:
+    branches: [release/claude-portfolio]
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+concurrency:
+  group: preview-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-node@v7.1.0
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run check
+      - run: npm run lint
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - run: npm test
+        env:
+          PORTFOLIO_PUBLISH: '1'
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: claude-portfolio-review
+          path: |
+            dist/
+            .local/claude/screenshots/
+            .local/claude/design-comparison.json
+            test-results/
+          include-hidden-files: true

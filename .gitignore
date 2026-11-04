@@ -9,3 +9,8 @@ playwright-report/
 .local/
 
 CODEX_MASTER_PROMPT_ART2FCL.md
+
+dist/
+files (18)/
+references/claude-design/*.mp3
+references/claude-design/portfolio-azriel-preview.html
