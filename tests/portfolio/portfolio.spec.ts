@@ -1,4 +1,4 @@
-import {test,expect} from '@playwright/test';
+import {test,expect,chromium} from '@playwright/test';
 import {readFile,mkdir,writeFile} from 'node:fs/promises';
 test('canonical portfolio, complete intro, city and five responsive layouts',async({page})=>{
  test.setTimeout(180000);const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text())});
@@ -16,7 +16,8 @@ test('contact destinations, overlay passthrough and accessible mobile music layo
  await expect(page.locator('#fx')).toHaveCSS('pointer-events','none');await page.locator('#mpd').click();await expect(page.locator('#mpd')).toHaveAttribute('aria-expanded','true');const box=await page.locator('#mp').boundingBox();expect(box!.x).toBeGreaterThanOrEqual(0);expect(box!.x+box!.width).toBeLessThanOrEqual(375);
  await page.screenshot({path:'.local/claude/screenshots/player-mobile.png'});await page.locator('#mpd').click();await page.keyboard.press('Tab');await expect(page.locator(':focus')).toHaveCount(1);
 });
-test('real music plays without autoplay, seeks, mutes and survives navigation',async({page})=>{
+test('real music controls work when autoplay is blocked',async({page})=>{
+await page.addInitScript(()=>{const play=HTMLMediaElement.prototype.play;let first=true;HTMLMediaElement.prototype.play=function(){if(first){first=false;return Promise.reject(new DOMException('Test autoplay policy','NotAllowedError'));}return play.call(this);};});
 
  await page.emulateMedia({reducedMotion:'reduce'});await page.goto('/');const audio=page.locator('#au');await expect.poll(()=>audio.evaluate((a:HTMLAudioElement)=>a.readyState)).toBeGreaterThan(0);expect(await audio.evaluate((a:HTMLAudioElement)=>a.paused)).toBeTruthy();
  await page.locator('#mpd').click();await page.getByRole('button',{name:'Putar musik',exact:true}).click();await expect.poll(()=>audio.evaluate((a:HTMLAudioElement)=>a.currentTime)).toBeGreaterThan(.1);await expect(page.locator('#ml')).toHaveText('NOW PLAYING');
@@ -24,6 +25,7 @@ test('real music plays without autoplay, seeks, mutes and survives navigation',a
  await page.locator('nav a[href="#work"]').click();expect(await audio.evaluate((a:HTMLAudioElement)=>a.paused)).toBeFalsy();await page.getByRole('button',{name:'Jeda musik'}).click();expect(await audio.evaluate((a:HTMLAudioElement)=>a.paused)).toBeTruthy();
 });
 test('actual analyser paints the lime signal while playing',async({page})=>{
+await page.addInitScript(()=>{const play=HTMLMediaElement.prototype.play;let first=true;HTMLMediaElement.prototype.play=function(){if(first){first=false;return Promise.reject(new DOMException('Test autoplay policy','NotAllowedError'));}return play.call(this);};});
 await page.goto('/');await expect(page.locator('#pre')).toHaveCount(0,{timeout:10000});await page.locator('#mpd').click();await page.locator('#pp').click();await expect.poll(()=>page.locator('#eq').evaluate((c:HTMLCanvasElement)=>Array.from(c.getContext('2d')!.getImageData(0,0,72,20).data).some(v=>v>0))).toBeTruthy();
 });
 test('missing audio, WebGL failure and no-JS remain usable',async({page,browser})=>{
@@ -49,4 +51,15 @@ test('compare canonical source geometry and palette',async({page,browser})=>{
 
 test('touch device uses native cursor and permits navigation',async({browser})=>{
  const context=await browser.newContext({viewport:{width:390,height:844},hasTouch:true,isMobile:true,deviceScaleFactor:2});const page=await context.newPage();await page.goto('/');await expect(page.locator('#pre')).toHaveCount(0,{timeout:10000});await expect(page.locator('body')).not.toHaveClass(/custom-cursor/);await page.locator('nav a[href="#contact"]').tap();await expect(page.locator('#contact')).toBeInViewport({timeout:10000});await page.locator('#mpd').tap();await expect(page.locator('#mpd')).toHaveAttribute('aria-expanded','true');await page.screenshot({path:'.local/claude/screenshots/touch-contact.png'});await context.close();
+});
+
+
+test('blocked autoplay starts on first page gesture and respects pause',async({page})=>{
+ await page.addInitScript(()=>{const original=HTMLMediaElement.prototype.play;let first=true;HTMLMediaElement.prototype.play=function(){if(first){first=false;return Promise.reject(new DOMException('Test policy','NotAllowedError'));}return original.call(this);};});
+ await page.emulateMedia({reducedMotion:'reduce'});await page.goto('/');await expect(page.locator('#ml')).toHaveText('TAP TO PLAY');await page.locator('#home h1').click();await expect.poll(()=>page.locator('#au').evaluate((a:HTMLAudioElement)=>a.currentTime)).toBeGreaterThan(.1);await page.locator('#pp').click();await page.locator('#home h1').click();expect(await page.locator('#au').evaluate((a:HTMLAudioElement)=>a.paused)).toBeTruthy();
+});
+
+test('music starts at load when browser autoplay policy permits',async()=>{
+ const browser=await chromium.launch({channel:process.env.CI?undefined:'msedge',args:['--autoplay-policy=no-user-gesture-required']});
+ try{const page=await browser.newPage({baseURL:String(test.info().project.use.baseURL),reducedMotion:'reduce'});await page.goto('/');await expect.poll(()=>page.locator('#au').evaluate((a:HTMLAudioElement)=>a.currentTime)).toBeGreaterThan(.1);await expect(page.locator('#ml')).toHaveText('NOW PLAYING');await page.locator('#pp').click();expect(await page.locator('#au').evaluate((a:HTMLAudioElement)=>a.paused)).toBeTruthy();}finally{await browser.close();}
 });

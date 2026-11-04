@@ -21,7 +21,7 @@ npm run build
 node scripts/serve-portfolio.mjs dist 4175
 ```
 
-The player loads the supplied MP3 after metadata preload and starts playback only on a user gesture. Missing-file errors still disable unavailable controls gracefully.
+The player loads the supplied MP3 after metadata preload and attempts playback on load, falling back to the first page click/touch or Enter/Space if browser autoplay policy blocks it. Missing-file errors still disable unavailable controls gracefully.
 
 ## Validation
 

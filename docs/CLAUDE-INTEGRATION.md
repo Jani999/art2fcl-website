@@ -79,3 +79,7 @@ The owner approved production merge/deployment. Release branch `release/claude-p
 ## Production audio activation
 
 Following the owner's explicit request to enable the supplied recording in production, the MP3 is now included in `portfolio/assets/audio/` and both build outputs. The prior deploy-time exclusion has been removed. No autoplay was added. CI now exercises playback, seeking, mute/volume and analyser output against the public build as well as missing-audio fallback. This records the deployment instruction, not a statement about music licensing.
+
+## Autoplay request
+
+Music now attempts audible playback on page load. If the browser rejects it, a first genuine page click/touch or Enter/Space starts it. Explicit player controls are excluded from that fallback so pause does not immediately restart playback. No browser restriction is bypassed and successful autoplay does not create a suspended Web Audio graph; analyser initialization follows user interaction. Tests cover allowed autoplay, rejected autoplay with first-gesture recovery, and deliberate pause remaining paused.
