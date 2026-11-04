@@ -56,7 +56,7 @@ try{if(!RM&&window.tsParticles)tsParticles.load({id:'fx',options:{fullScreen:{en
 if(!RM&&matchMedia('(pointer:fine)').matches)$$('.mag').forEach(b=>{const xt=gsap.quickTo(b,'x',{duration:.4,ease:'power3'}),yt=gsap.quickTo(b,'y',{duration:.4,ease:'power3'});b.addEventListener('pointermove',e=>{const r=b.getBoundingClientRect();xt((e.clientX-r.left-r.width/2)*.3);yt((e.clientY-r.top-r.height/2)*.3)});b.addEventListener('pointerleave',()=>{xt(0);yt(0)})});
 const cu=$('.cur');if(!RM&&matchMedia('(pointer:fine)').matches){document.body.classList.add('custom-cursor');const qx=gsap.quickTo(cu,'x',{duration:.18}),qy=gsap.quickTo(cu,'y',{duration:.18});addEventListener('pointermove',e=>{qx(e.clientX);qy(e.clientY)});$$('a,.pj,.chip,.mp button').forEach(el=>{el.addEventListener('pointerenter',()=>cu.classList.add('h'));el.addEventListener('pointerleave',()=>cu.classList.remove('h'))})}
 
-/* Local MP3 review; deployment builds omit the recording until rights are confirmed. */
+/* Supplied recording: shared local and production player. */
 const au=$('#au'),mp=$('#mp'),pp=$('#pp'),sk=$('#sk'),mu=$('#mu'),ec=$('#eq').getContext('2d'),status=$('#audio-status');
 let ac,an,fd,source,ready=false;au.volume=.6;
 const timeLabel=t=>`${Math.floor(t/60)}:${String(Math.floor(t%60)).padStart(2,'0')}`;

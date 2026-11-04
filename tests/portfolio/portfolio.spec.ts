@@ -17,22 +17,22 @@ test('contact destinations, overlay passthrough and accessible mobile music layo
  await page.screenshot({path:'.local/claude/screenshots/player-mobile.png'});await page.locator('#mpd').click();await page.keyboard.press('Tab');await expect(page.locator(':focus')).toHaveCount(1);
 });
 test('real music plays without autoplay, seeks, mutes and survives navigation',async({page})=>{
- test.skip(!!process.env.PORTFOLIO_PUBLISH,'Publish artifact deliberately excludes unlicensed recording');
+
  await page.emulateMedia({reducedMotion:'reduce'});await page.goto('/');const audio=page.locator('#au');await expect.poll(()=>audio.evaluate((a:HTMLAudioElement)=>a.readyState)).toBeGreaterThan(0);expect(await audio.evaluate((a:HTMLAudioElement)=>a.paused)).toBeTruthy();
  await page.locator('#mpd').click();await page.getByRole('button',{name:'Putar musik',exact:true}).click();await expect.poll(()=>audio.evaluate((a:HTMLAudioElement)=>a.currentTime)).toBeGreaterThan(.1);await expect(page.locator('#ml')).toHaveText('NOW PLAYING');
  await page.locator('#volume').fill('25');expect(await audio.evaluate((a:HTMLAudioElement)=>a.volume)).toBe(.25);await page.locator('#sk').fill('500');await expect.poll(()=>audio.evaluate((a:HTMLAudioElement)=>a.currentTime)).toBeGreaterThan(30);await page.getByRole('button',{name:'Bisukan',exact:true}).click();expect(await audio.evaluate((a:HTMLAudioElement)=>a.muted)).toBeTruthy();await page.getByRole('button',{name:'Aktifkan suara'}).click();
  await page.locator('nav a[href="#work"]').click();expect(await audio.evaluate((a:HTMLAudioElement)=>a.paused)).toBeFalsy();await page.getByRole('button',{name:'Jeda musik'}).click();expect(await audio.evaluate((a:HTMLAudioElement)=>a.paused)).toBeTruthy();
 });
 test('actual analyser paints the lime signal while playing',async({page})=>{
- test.skip(!!process.env.PORTFOLIO_PUBLISH,'Local review audio only');await page.goto('/');await expect(page.locator('#pre')).toHaveCount(0,{timeout:10000});await page.locator('#mpd').click();await page.locator('#pp').click();await expect.poll(()=>page.locator('#eq').evaluate((c:HTMLCanvasElement)=>Array.from(c.getContext('2d')!.getImageData(0,0,72,20).data).some(v=>v>0))).toBeTruthy();
+await page.goto('/');await expect(page.locator('#pre')).toHaveCount(0,{timeout:10000});await page.locator('#mpd').click();await page.locator('#pp').click();await expect.poll(()=>page.locator('#eq').evaluate((c:HTMLCanvasElement)=>Array.from(c.getContext('2d')!.getImageData(0,0,72,20).data).some(v=>v>0))).toBeTruthy();
 });
 test('missing audio, WebGL failure and no-JS remain usable',async({page,browser})=>{
  await page.addInitScript(()=>{const original=HTMLCanvasElement.prototype.getContext;Object.defineProperty(HTMLCanvasElement.prototype,'getContext',{value:function(this:HTMLCanvasElement,...args:unknown[]){if(String(args[0]).includes('webgl'))return null;return Reflect.apply(original,this,args);}});});
  await page.route('**/assets/audio/*.mp3',r=>r.abort());await page.emulateMedia({reducedMotion:'reduce'});await page.goto('/');await expect(page.locator('#mp')).toHaveAttribute('data-audio','unavailable');await expect(page.locator('#pp')).toBeDisabled();await expect(page.locator('#home h1')).toBeVisible();await page.locator('nav a[href="#stack"]').click();await expect(page.locator('#stack')).toBeInViewport();
  const context=await browser.newContext({javaScriptEnabled:false});const staticPage=await context.newPage();await staticPage.goto('/');await expect(staticPage.locator('#pre')).toBeHidden();await expect(staticPage.locator('#home h1')).toBeVisible();await expect(staticPage.locator('.chip').first()).toHaveCSS('opacity','1');await context.close();
 });
-test('production build excludes MP3 and inline embedded audio',async()=>{
- const html=await readFile('dist/index.html','utf8');expect(html).not.toContain('base64,');expect(html).not.toContain('src="assets/audio/demons-shot.mp3"');expect(html).toContain('data-audio-unavailable');
+test('production build includes the supplied audio without embedding base64',async()=>{
+ const html=await readFile('dist/index.html','utf8');expect(html).not.toContain('base64,');expect(html).toContain('src="assets/audio/demons-shot.mp3"');expect(html).not.toContain('data-audio-unavailable');expect((await readFile('dist/assets/audio/demons-shot.mp3')).length).toBeGreaterThan(1000000);
 });
 test('compare canonical source geometry and palette',async({page,browser})=>{
  const context=await browser.newContext({viewport:{width:1440,height:900},reducedMotion:'reduce'});const ref=await context.newPage();
