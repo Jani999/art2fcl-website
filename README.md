@@ -12,16 +12,16 @@ npm run build:preview
 npm run preview
 ```
 
-Open http://127.0.0.1:4173. The local build expects the supplied recording at `references/claude-design/demons-shot.mp3`. It is ignored by Git. A review server may also be running at http://127.0.0.1:4174.
+Open http://127.0.0.1:4173. The supplied recording is bundled at `portfolio/assets/audio/demons-shot.mp3` for both preview and production. A review server may also be running at http://127.0.0.1:4174.
 
-For a checkout without the supplied recording:
+To review the production artifact:
 
 ```sh
 npm run build
 node scripts/serve-portfolio.mjs dist 4175
 ```
 
-This publish artifact intentionally displays an unavailable-audio state. Public redistribution of the recording awaits confirmed rights; it is never included in the default build or review artifacts uploaded by CI.
+The player loads the supplied MP3 after metadata preload and starts playback only on a user gesture. Missing-file errors still disable unavailable controls gracefully.
 
 ## Validation
 
@@ -34,13 +34,13 @@ npm test
 npm run typecheck
 ```
 
-Playwright uses installed Edge locally, Chromium in CI, or Firefox with `TEST_ENGINE=firefox`. Set `PORTFOLIO_PUBLISH=1` to test `dist/` on port 4175 with local-audio tests explicitly skipped. Screenshots and measurements are under `.local/claude/`.
+Playwright uses installed Edge locally, Chromium in CI, or Firefox with `TEST_ENGINE=firefox`. Set `PORTFOLIO_PUBLISH=1` to test `dist/` on port 4175 including real audio playback tests. Screenshots and measurements are under `.local/claude/`.
 
 ## Files and deployment
 
 - `portfolio/`: HTML, CSS, application JS, local pinned libraries and fonts.
 - `references/claude-design/index.html`: unmodified canonical visual reference.
-- `scripts/build-portfolio.mjs`: separate local-audio and public build outputs.
+- `scripts/build-portfolio.mjs`: separate preview and public build outputs using the same audio asset.
 - `dist/`: GitHub Pages artifact; never includes legacy `public/` assets.
 - `.github/workflows/deploy.yml`: deploys only from `main`, including manual runs. Owner approval is required before merging this branch.
 

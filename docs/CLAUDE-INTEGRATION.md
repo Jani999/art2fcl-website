@@ -75,3 +75,7 @@ Updated to the owner's supplied compact/expanded black-player reference: 406px r
 ## Approved production release preparation
 
 The owner approved production merge/deployment. Release branch `release/claude-portfolio` starts directly at production `c529d1d`; only Claude integration and the revised music player from review commit `1317dfa` are copied. No V2/V3 commit, `src/` change, historical `public/` change, or experimental dependency update is included. All portfolio files match the approved preview (Git line endings normalized). A dedicated TypeScript configuration checks the active static portfolio's browser tests/config without requiring generated legacy Next.js route files. The production artifact remains `dist/`, including the previous public-audio exclusion. Pages domain and HTTPS settings are retained without DNS operations.
+
+## Production audio activation
+
+Following the owner's explicit request to enable the supplied recording in production, the MP3 is now included in `portfolio/assets/audio/` and both build outputs. The prior deploy-time exclusion has been removed. No autoplay was added. CI now exercises playback, seeking, mute/volume and analyser output against the public build as well as missing-audio fallback. This records the deployment instruction, not a statement about music licensing.
