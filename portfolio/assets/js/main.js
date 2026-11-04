@@ -67,6 +67,20 @@ au.addEventListener('play',()=>{mp.classList.add('playing');pp.setAttribute('ari
 au.addEventListener('pause',()=>{mp.classList.remove('playing');pp.setAttribute('aria-label','Putar musik');$('#ml').textContent='PAUSED';drawIdle()});
 const unavailable=()=>{status.textContent='Audio belum tersedia untuk publikasi.';$('#ml').textContent='UNAVAILABLE';pp.disabled=sk.disabled=mu.disabled=$('#volume').disabled=true;mp.dataset.audio='unavailable';};
 au.addEventListener('error',unavailable);if(!au.hasAttribute('src')||au.error)unavailable();
+// Try audible autoplay; browser policy may require the first genuine gesture.
+let awaitingGesture=true;
+function removeMusicGesture(){awaitingGesture=false;document.removeEventListener('pointerdown',firstMusicGesture);document.removeEventListener('keydown',firstMusicGesture)}
+async function firstMusicGesture(event){
+ if(!awaitingGesture||event.type==='keydown'&&!['Enter',' '].includes(event.key))return;
+ // Explicit player controls own their play/pause state and must not double-toggle.
+ if(event.target.closest?.('#mp'))return;
+ removeMusicGesture();if(au.error||!au.hasAttribute('src'))return;
+ setup();try{if(ac?.state==='suspended')await ac.resume();await au.play();status.textContent='';}catch{status.textContent='Klik tombol play untuk memulai musik.';}
+}
+document.addEventListener('pointerdown',firstMusicGesture);document.addEventListener('keydown',firstMusicGesture);
+pp.addEventListener('click',removeMusicGesture);cleanups.push(removeMusicGesture);
+if(au.hasAttribute('src')&&!au.error)au.play().catch(error=>{if(error.name==='NotAllowedError'&&au.paused){$('#ml').textContent='TAP TO PLAY';status.textContent='Musik akan mulai setelah interaksi pertama.';}});
+
 const volume=$('#volume');
 const fill=el=>el.style.setProperty('--fill',Number(el.value)/Number(el.max)*100+'%');
 function syncTime(){if(Number.isFinite(au.duration)){sk.value=au.currentTime/au.duration*1000;sk.setAttribute('aria-valuetext',timeLabel(au.currentTime)+' dari '+timeLabel(au.duration));$('#audio-time').textContent=timeLabel(au.currentTime);$('#audio-duration').textContent=timeLabel(au.duration);fill(sk)}}
